@@ -1,10 +1,21 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux/es/exports';
 
-function NavBar({ onSearch }) {
-  const searchForMovies = (query) => onSearch(query);
+import { getAllMovies, searhMovies } from '../redux/action/movieActions';
+
+function NavBar() {
+  const dispatch = useDispatch();
+
+  // Search For Movies
+  const searchForMovies = async (query) => {
+    if (query === '') {
+      dispatch(getAllMovies());
+    } else {
+      dispatch(searhMovies(query));
+    }
+  };
 
   return (
     <div className="nav-style w-100 ">
@@ -37,7 +48,4 @@ function NavBar({ onSearch }) {
   );
 }
 
-NavBar.propTypes = {
-  onSearch: PropTypes.func.isRequired,
-};
 export default NavBar;
