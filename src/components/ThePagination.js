@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux/es/exports';
+import { moviesOnPage } from '../redux/action/movieActions';
 
-function ThePagination({ getAllCurrentPageMovies, pageCount }) {
+function ThePagination() {
+  const [pageCount, setPageCount] = useState(0);
+  const dispatch = useDispatch();
+  const pages = useSelector((state) => state.pageCount);
+
+  useEffect(() => {
+    setPageCount(pages);
+  }, []);
+
   const handlePageClick = (data) => {
     console.log(data.selected + 1);
     //! page must be less than or equal to 500 ?
     //*  Because our API KEY have access only to 500 pages not all pages.
     if (data.selected + 1 >= 1 && data.selected + 1 <= 500)
-      getAllCurrentPageMovies(data.selected + 1);
+      // Get all current page movies data form API using axoi
+
+      dispatch(moviesOnPage(data.selected + 1));
   };
 
   return (
@@ -35,10 +46,5 @@ function ThePagination({ getAllCurrentPageMovies, pageCount }) {
     </div>
   );
 }
-
-ThePagination.propTypes = {
-  getAllCurrentPageMovies: PropTypes.func.isRequired,
-  pageCount: PropTypes.number.isRequired,
-};
 
 export default ThePagination;

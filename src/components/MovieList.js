@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row } from 'react-bootstrap';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import CardMovie from './CardMovie';
 import ThePagination from './ThePagination';
+import { getAllMovies } from '../redux/action/movieActions';
 
-function MovieList({ movies, getAllCurrentPageMovies, pageCount }) {
+function MovieList() {
+  const [movies, setMovies] = useState([]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log('The MovieList componented is mounted to the DOM');
+    dispatch(getAllMovies());
+  }, []);
+
+  const dataMovies = useSelector((state) => state.movies);
+
+  useEffect(() => {
+    setMovies(dataMovies);
+  }, [dataMovies]);
   return (
     <Row className="mt-4">
       {movies.length > 0 ? (
@@ -18,18 +31,8 @@ function MovieList({ movies, getAllCurrentPageMovies, pageCount }) {
           </h2>
         </div>
       )}
-      {movies.length > 0 && (
-        <ThePagination
-          getAllCurrentPageMovies={getAllCurrentPageMovies}
-          pageCount={pageCount}
-        />
-      )}
+      {movies.length > 0 && <ThePagination />}
     </Row>
   );
 }
-MovieList.propTypes = {
-  movies: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-  getAllCurrentPageMovies: PropTypes.func.isRequired,
-  pageCount: PropTypes.number.isRequired,
-};
 export default MovieList;
